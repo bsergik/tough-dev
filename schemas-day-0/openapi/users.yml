@@ -1,0 +1,204 @@
+openapi: '3.0.2'
+info:
+  title: User service API.
+  version: 'v0.1.0'
+
+servers:
+  - url: https://api.server.test/v1
+
+paths:
+
+  /healthz:
+    get:
+      responses:
+        '200':
+          description: OK
+      tags:
+      - Health methods
+
+  /readyz:
+    get:
+      responses:
+        '200':
+          description: OK
+      tags:
+      - Health methods
+
+  /metrics:
+    get:
+      responses:
+        '200':
+          description: OK
+      tags:
+      - Metric methods
+
+  /users:
+    post:
+      summary: Create new user.
+      requestBody:
+        $ref: '#/components/requestBodies/create-user-request'
+      responses:
+        '200':
+          $ref: '#/components/responses/user-created'
+      tags:
+      - User methods
+
+    get:
+      summary: Get users list.
+      responses:
+        '200':
+          $ref: '#/components/responses/users-list'
+      tags:
+      - User methods
+
+  /user/{user_id}:
+    put:
+      summary: Update user info.
+      requestBody:
+        $ref: '#/components/requestBodies/update-user-request'
+      responses:
+        '200':
+          $ref: '#/components/responses/user-updated'
+      tags:
+      - User methods
+
+    delete:
+      summary: Delete user.
+      responses:
+        '200':
+          $ref: '#/components/responses/user-deleted'
+      tags:
+      - User methods
+
+  /roles:
+    get:
+      summary: Get roles list.
+      responses:
+        '200':
+          $ref: '#/components/responses/roles-list'
+      tags:
+      - Role methods
+
+components:
+  schemas:
+
+    user:
+      type: object
+      properties:
+        id:
+          description: User ID.
+          type: integer
+          example: 1
+        name:
+          description: Username.
+          type: string
+          example: "Popug A"
+        createdAt:
+          description: Date and time when the task was created.
+          type: string
+          example: '2024-02-17 11:12:15'
+        updatedAt:
+          description: Date and time when the task was updated.
+          type: string
+          example: '2024-02-18 14:17:39'
+      description: >
+        This object is a User.
+
+    role:
+      type: object
+      properties:
+        id:
+          description: Role ID.
+          type: integer
+          example: 1
+        name:
+          description: Role name.
+          type: string
+          example: "administrator"
+        description:
+          description: Role description.
+          type: string
+          example: "Some long detailed description of the role."
+        may_have_tasks:
+          description: Tasks may be assigned to users with this role.
+          type: boolean
+          example: true
+        createdAt:
+          description: Date and time when the role was created.
+          type: string
+          example: '2024-02-17 11:12:15'
+
+  requestBodies:
+
+    create-user-request:
+      description: A JSON object containing new user.
+      required: true
+      content:
+        application/json:
+          schema:
+            description: User object which is being created.
+            type: object
+            properties:
+              name:
+                description: User name.
+                type: string
+                example: "Popug A"
+              roleId:
+                description: Role ID for the user.
+                type: integer
+                example: 1
+
+    update-user-request:
+      description: A JSON object containing updated user info.
+      required: true
+      content:
+        application/json:
+          schema:
+            description: Updated user info.
+            type: object
+            properties:
+              name:
+                description: User name.
+                type: string
+                example: "Popug A"
+              roleId:
+                description: Role ID for the user.
+                type: integer
+                example: 1
+
+  responses:
+
+    user-created:
+      description: Single user info response.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/user'
+    user-updated:
+      description: Single user info response.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/user'
+    user-deleted:
+      description: Single user info response.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/user'
+    users-list:
+      description: Array of users.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/user'
+    roles-list:
+      description: Roles list.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/role'
