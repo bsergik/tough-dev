@@ -1,0 +1,29 @@
+{
+    "title": "Task",
+    "description": "",
+    "type": "object",
+    "properties": {
+        "version": {
+            "description": "Version of a message",
+            "type": "string"
+        },
+        "taskId": {
+            "description": "The unique identifier for a task",
+            "type": "integer"
+        },
+        "assigneeId": {
+            "description": "User ID who the task assigned to.. 0 means no assignments",
+            "type": "integer"
+        },
+        "statusId": {
+            "description": "Status of the task",
+            "type": "integer"
+        }
+    },
+    "required": [
+        "version",
+        "taskId",
+        "userId",
+        "statusId"
+    ]
+}
