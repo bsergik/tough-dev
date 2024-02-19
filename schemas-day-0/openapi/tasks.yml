@@ -1,0 +1,243 @@
+openapi: '3.0.2'
+info:
+  title: Tasks service API.
+  version: 'v0.1.0'
+
+servers:
+  - url: https://api.server.test/v1
+
+paths:
+
+  /healthz:
+    get:
+      responses:
+        '200':
+          description: OK
+      tags:
+      - Health methods
+
+  /readyz:
+    get:
+      responses:
+        '200':
+          description: OK
+      tags:
+      - Health methods
+
+  /metrics:
+    get:
+      responses:
+        '200':
+          description: OK
+      tags:
+      - Metric methods
+
+  /tasks:
+    post:
+      summary: Create new task.
+      requestBody:
+        $ref: '#/components/requestBodies/create-task-request'
+      responses:
+        '200':
+          $ref: '#/components/responses/task-created'
+      tags:
+      - Task methods
+
+    get:
+      summary: Get tasks list.
+      responses:
+        '200':
+          $ref: '#/components/responses/tasks-list'
+      tags:
+      - Task methods
+
+  /task/{task_id}/status:
+    post:
+      summary: Set status for a task.
+      requestBody:
+        $ref: '#/components/requestBodies/task-status-request'
+      responses:
+        '200':
+          $ref: '#/components/responses/task-updated'
+      tags:
+      - Task methods
+      - Task Status methods
+
+    get:
+      summary: Get status for a task.
+      responses:
+        '200':
+          $ref: '#/components/responses/task-status'
+      tags:
+      - Task methods
+      - Task Status methods
+
+  /task/{task_id}/statuses:
+    get:
+      summary: Get statuses list for a task.
+      responses:
+        '200':
+          $ref: '#/components/responses/task-statuses'
+      tags:
+      - Task methods
+      - Task Status methods
+
+  /statuses:
+    get:
+      summary: Get available statuses list.
+      responses:
+        '200':
+          $ref: '#/components/responses/statuses-list'
+      tags:
+      - Status methods
+
+
+components:
+  schemas:
+
+    task:
+      type: object
+      properties:
+        id:
+          description: Task ID.
+          type: integer
+          example: 1
+        title:
+          description: Task title.
+          type: string
+          example: "Create a new service"
+        description:
+          description: Task description.
+          type: string
+          example: "This is a long multiline task description."
+        statusId:
+          description: Status if the task.
+          type: integer
+          example: 1
+        assigneeId:
+          description: User ID who the task assigned to.
+          type: integer
+          example: 1
+        createdAt:
+          description: Date and time when the task was created.
+          type: string
+          example: '2024-02-17 11:12:15'
+        updatedAt:
+          description: Date and time when the task was updated.
+          type: string
+          example: '2024-02-18 14:17:39'
+      description: >
+        This object is a Task.
+
+    status:
+      type: object
+      properties:
+        id:
+          description: Status ID.
+          type: integer
+          example: 1
+        name:
+          description: Status title.
+          type: string
+          example: "Created"
+        description:
+          description: Status description.
+          type: string
+          example: "This is a long description for the status."
+        createdAt:
+          description: Date and time when the status was changed on the task.
+          type: string
+          example: '2024-02-17 11:12:15'
+
+  requestBodies:
+
+    create-task-request:
+      description: A JSON object containing new task.
+      required: true
+      content:
+        application/json:
+          schema:
+            description: Task object which is being created.
+            type: object
+            properties:
+              title:
+                description: Task title.
+                type: string
+                example: "Create a new service"
+              description:
+                description: Task description.
+                type: string
+                example: "This is a long multiline task description."
+              userId:
+                description: User ID who created the task.
+                type: integer
+                example: 1
+              assigneeId:
+                description: User ID who the task assigned to.
+                type: integer
+                example: 1
+
+    task-status-request:
+      description: A JSON object containing new status ID for a task.
+      required: true
+      content:
+        application/json:
+          schema:
+            description: Task status.
+            type: object
+            properties:
+              statusId:
+                description: Status ID.
+                type: integer
+                example: 1
+
+  responses:
+
+    task-created:
+      description: Single Task info response.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/task'
+    task-updated:
+      description: Single Task info response.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/task'
+    tasks-list:
+      description: Array of tasks.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/task'
+    task-status:
+      description: Task status.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/status'
+    task-statuses:
+      description: Task status.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              allOf:
+                - $ref: '#/components/schemas/status'
+              properties:
+                userId:
+                  description: User ID who changed the task status.
+                  type: integer
+                  example: 1
+    statuses-list:
+      description: Status list.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/status'

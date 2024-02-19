@@ -1,0 +1,44 @@
+openapi: '3.0.2'
+info:
+  title: Task Assigner service API.
+  description: >
+    This service is being used for assigning task on users.
+  version: 'v0.1.0'
+
+servers:
+  - url: https://api.server.test/v1
+
+paths:
+
+  /healthz:
+    get:
+      responses:
+        '200':
+          description: OK
+      tags:
+      - Health methods
+
+  /readyz:
+    get:
+      responses:
+        '200':
+          description: OK
+      tags:
+      - Health methods
+
+  /metrics:
+    get:
+      responses:
+        '200':
+          description: OK
+      tags:
+      - Metric methods
+
+  /tasks/assign:
+    post:
+      summary: Assign all tasks without assignee.
+      responses:
+        '200':
+          description: OK
+      tags:
+      - Task methods
