@@ -5,6 +5,8 @@ import (
 	"os"
 
 	"github.com/Nerzal/gocloak/v13"
+	"github.com/bsergik/tough-dev/services/auth/internal/database/psql"
+	"github.com/bsergik/tough-dev/services/auth/internal/message-broker/kafka"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"
 )
@@ -16,16 +18,11 @@ type Instance struct {
 	ginEngine            *gin.Engine
 	keycloakClientID     string
 	keycloakClientSecret string
+	db                   *psql.Instance
+	mq                   *kafka.Instance
 }
 
-// type KeyCloak interface {
-// 	CreateUser(ctx context.Context, token, realm string, user gocloak.User) (string, error)
-// 	LoginAdmin(ctx context.Context, username, password, ream string) (*gocloak.JWT, error)
-// 	// LoginClient(ctx context.Context, clientID, clientSecret, realm string, scopes ...string) (*gocloak.JWT, error)
-// 	SetPassword(ctx context.Context, token, userID, realm, password string, temporary bool) error
-// }
-
-func NewServer(keycloak *gocloak.GoCloak) *Instance {
+func NewServer(keycloak *gocloak.GoCloak, db *psql.Instance, mq *kafka.Instance) *Instance {
 	keycloakAdminUser, ok := os.LookupEnv("KEYCLOAK_ADMIN_USER")
 	if !ok {
 		log.Panic().Msg("Env KEYCLOAK_ADMIN_USER is required")
@@ -64,6 +61,8 @@ func NewServer(keycloak *gocloak.GoCloak) *Instance {
 		usersRealm:           keycloakAdminRealm, // TODO replace with realm for users.
 		keycloakClientID:     keycloakClientID,
 		keycloakClientSecret: keycloakClientSecret,
+		db:                   db,
+		mq:                   mq,
 	}
 
 	ginEngine := gin.Default()

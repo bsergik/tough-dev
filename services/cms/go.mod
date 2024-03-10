@@ -1,4 +1,4 @@
-module github.com/bsergik/tough-dev/services/auth
+module github.com/bsergik/tough-dev/services/cms
 
 go 1.22.0
 
@@ -6,7 +6,6 @@ require (
 	github.com/Nerzal/gocloak/v13 v13.9.0
 	github.com/gin-gonic/gin v1.9.1
 	github.com/gofrs/uuid v4.4.0+incompatible
-	github.com/golang/protobuf v1.5.0
 	github.com/jackc/pgx/v5 v5.5.5
 	github.com/rs/zerolog v1.32.0
 	github.com/segmentio/kafka-go v0.4.47
