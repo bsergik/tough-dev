@@ -1,0 +1,22 @@
+---
+version: '3.3'
+
+# networks:
+#   net:
+#     driver: bridge
+
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak
+    container_name: tough-dev-keycloak
+    command: ["start-dev"]
+    ports:
+      - 8003:8080
+    restart: unless-stopped
+    # healthcheck:
+    #   ## In production the healthcheck section should be commented.
+    #   disable: true
+    environment:
+      - TZ=Australia/Melbourne
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
