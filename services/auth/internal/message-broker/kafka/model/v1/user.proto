@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package kafka.model.v1;
+option go_package = "github.com/bsergik/tough-dev/internal/message-broker/kafka/grpc/v1";
+
+import "google/protobuf/timestamp.proto";
+
+message User {
+    string public_id = 1;
+    int32 role_id = 2;
+    string username = 3;
+    string first_name = 4;
+    string last_name = 5;
+    string email = 6;
+    bool enabled = 7;
+    google.protobuf.Timestamp created_at = 8;
+    google.protobuf.Timestamp updated_at = 9;
+}
